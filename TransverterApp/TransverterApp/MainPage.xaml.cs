@@ -1,9 +1,9 @@
 ﻿using System;
-using System.IO;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Text.RegularExpressions;
 using Xamarin.Forms;
-using System.Collections.ObjectModel;
 
 namespace TransverterApp
 {
@@ -13,7 +13,8 @@ namespace TransverterApp
     public partial class MainPage : ContentPage
     {
         public ObservableCollection<string> fileList { get; set; } = new ObservableCollection<string>();
-        string dirpath = Path.Combine(Environment.GetEnvironmentVariable("ANDROID_STORAGE"), "emulated", "0", "qqmusic", "song");
+
+        private string dirpath = Path.Combine(Environment.GetEnvironmentVariable("ANDROID_STORAGE"), "emulated", "0", "qqmusic", "song");
         public MainPage()
         {
             InitializeComponent();
@@ -23,7 +24,7 @@ namespace TransverterApp
         private async void ReadFiles(object sender, EventArgs e)
         {
             Button bt = sender as Button;
-            ListView ls = (this.Content as Grid).Children[1] as ListView;
+            ListView ls = (Content as Grid).Children[1] as ListView;
             if (bt.Text == "读取")
             {
                 fileList.Clear();
@@ -31,7 +32,7 @@ namespace TransverterApp
                 {
                     try
                     {
-                        foreach (var f in Directory.EnumerateFiles(dirpath))
+                        foreach (string f in Directory.EnumerateFiles(dirpath))
                         {
                             if (Regex.Match(Path.GetExtension(f), @"qmc").Success)
                                 fileList.Add(Path.GetFileName(f));
@@ -62,7 +63,7 @@ namespace TransverterApp
                                 fileList[i] = "[解码完成]" + fileList[i];
                             }
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
 
                         }

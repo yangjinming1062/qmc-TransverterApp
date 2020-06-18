@@ -2,9 +2,9 @@
 
 namespace TransverterApp
 {
-    class Decoder
+    internal class Decoder
     {
-        byte[][] seedMap = new byte[][] {
+        private byte[][] seedMap = new byte[][] {
             new byte[]{0x4a, 0xd6, 0xca, 0x90, 0x67, 0xf7, 0x52},
             new byte[]{0x5e, 0x95, 0x23, 0x9f, 0x13, 0x11, 0x7e},
             new byte[]{0x47, 0x74, 0x3d, 0x90, 0xaa, 0x3f, 0x51},
@@ -14,10 +14,10 @@ namespace TransverterApp
             new byte[]{0x0e, 0x74, 0xbb, 0x90, 0xbc, 0x3f, 0x92},
             new byte[]{0x00, 0x09, 0x5b, 0x9f, 0x62, 0x66, 0xa1}
         };
-        int x = -1;
-        int y = 8;
-        int dx = 1;
-        int index = -1;
+        private int x = -1;
+        private int y = 8;
+        private int dx = 1;
+        private int index = -1;
 
         private byte NextMask()
         {
