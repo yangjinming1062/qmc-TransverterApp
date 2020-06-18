@@ -24,7 +24,6 @@ namespace TransverterApp
         private async void ReadFiles(object sender, EventArgs e)
         {
             Button bt = sender as Button;
-            ListView ls = (Content as Grid).Children[1] as ListView;
             if (bt.Text == "读取")
             {
                 fileList.Clear();
@@ -41,12 +40,14 @@ namespace TransverterApp
                     catch
                     {
                         await DisplayAlert("警告", "请先赋予读写存储空间的权限，否则无法读写文件", "知道了");
+                        return;
                     }
                 }
                 bt.Text = "解码";
             }
             else
             {
+                Switch saveQmc = ((Content as Grid).Children[1] as StackLayout).Children[0] as Switch;
                 if (bt.Text != "解码中...")
                 {
                     bt.Text = "解码中...";
@@ -60,6 +61,10 @@ namespace TransverterApp
                                 string ext = Path.GetExtension(fileList[i]);
                                 string outfile = Path.Combine(dirpath, fileList[i].Replace(ext, ext.Contains("flac") ? ".flac" : ".mp3"));
                                 decoder.Convert(Path.Combine(dirpath, fileList[i]), outfile);
+                                if (!saveQmc.IsToggled)
+                                {
+                                    File.Delete(Path.Combine(dirpath, fileList[i]));
+                                }
                                 fileList[i] = "[解码完成]" + fileList[i];
                             }
                         }
