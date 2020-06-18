@@ -1,11 +1,9 @@
 ﻿using System;
 using System.IO;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
 using Xamarin.Forms;
 using System.Collections.ObjectModel;
-using Xamarin.Forms.PlatformConfiguration;
 
 namespace TransverterApp
 {
