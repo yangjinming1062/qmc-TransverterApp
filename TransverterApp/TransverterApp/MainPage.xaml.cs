@@ -1,11 +1,8 @@
 ﻿using System;
-using Xamarin.Essentials;
 using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 using Xamarin.Forms;
 using System.Collections.ObjectModel;
 using Xamarin.Forms.PlatformConfiguration;
@@ -17,36 +14,64 @@ namespace TransverterApp
     [DesignTimeVisible(false)]
     public partial class MainPage : ContentPage
     {
-        public ObservableCollection<Label> fileList = new ObservableCollection<Label>();
+        public ObservableCollection<string> fileList { get; set; } = new ObservableCollection<string>();
+        string dirpath = Path.Combine(Environment.GetEnvironmentVariable("ANDROID_STORAGE"), "emulated", "0", "qqmusic", "song");
         public MainPage()
         {
             InitializeComponent();
             BindingContext = this;
         }
 
-        private void ReadFiles(object sender, EventArgs e)
+        private async void ReadFiles(object sender, EventArgs e)
         {
             Button bt = sender as Button;
+            ListView ls = (this.Content as Grid).Children[1] as ListView;
             if (bt.Text == "读取")
             {
                 fileList.Clear();
-                string basepath = Environment.GetEnvironmentVariable("ANDROID_STORAGE");
-                string dirpath = Path.Combine(basepath, "emulated", "0", "qqmusic", "song");
-                if(true)
+                if (Directory.Exists(dirpath))
                 {
-                    DirectoryInfo dirInfo = new DirectoryInfo(dirpath);
-                    foreach (var f in dirInfo.GetFiles())
+                    try
                     {
-                        Label lb = new Label();
-                        lb.Text = f.Name;
-                        fileList.Add(lb);
+                        foreach (var f in Directory.EnumerateFiles(dirpath))
+                        {
+                            if (Regex.Match(Path.GetExtension(f), @"qmc").Success)
+                                fileList.Add(Path.GetFileName(f));
+                        }
+                    }
+                    catch
+                    {
+                        await DisplayAlert("警告", "请先赋予读写存储空间的权限，否则无法读写文件", "知道了");
                     }
                 }
-                bt.Text = "转换";
+                bt.Text = "解码";
             }
             else
             {
-                bt.Text = "读取";
+                if (bt.Text != "解码中...")
+                {
+                    bt.Text = "解码中...";
+                    System.Threading.Tasks.Task.Factory.StartNew(() =>
+                    {
+                        try
+                        {
+                            for (int i = 0; i < fileList.Count; i++)
+                            {
+                                Decoder decoder = new Decoder();
+                                string ext = Path.GetExtension(fileList[i]);
+                                string outfile = Path.Combine(dirpath, fileList[i].Replace(ext, ext.Contains("flac") ? ".flac" : ".mp3"));
+                                decoder.Convert(Path.Combine(dirpath, fileList[i]), outfile);
+                                fileList[i] = "[解码完成]" + fileList[i];
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+
+                        }
+                    }).Wait();
+
+                    bt.Text = "读取";
+                }
             }
         }
     }

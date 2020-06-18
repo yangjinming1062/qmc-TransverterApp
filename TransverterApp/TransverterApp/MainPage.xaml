@@ -23,7 +23,7 @@
         <Button Text="读取" Clicked="ReadFiles" HorizontalOptions="Center" VerticalOptions="Center" ScaleX="2" ScaleY="2" Grid.Row="0"
                 Font="Large" BorderWidth="2" BorderColor="#29D029" BackgroundColor="#1976D2" FontSize="Large" TextColor="#FFFFFF"
                 CornerRadius="10"/>
-        <ListView ItemsSource="{Binding fileList}" SelectionMode="None" Grid.Row="1"/>
+        <ListView ItemsSource="{Binding fileList}" SelectionMode="None" Grid.Row="1" Header="待处理文件列表：" />
 
 
     </Grid>
