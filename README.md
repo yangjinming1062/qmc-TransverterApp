@@ -1,2 +1,3 @@
-# qmc-TransverterApp
+# qmc格式解码器
  QQ音乐qmc格式文件转换成普通音频文件
+ 该App仅供参考交流，请勿公开
