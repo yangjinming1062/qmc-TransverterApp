@@ -24,6 +24,7 @@ namespace TransverterApp
         private async void ReadFiles(object sender, EventArgs e)
         {
             Button bt = sender as Button;
+            Switch mqms = ((Content as Grid).Children[2] as StackLayout).Children[0] as Switch;
             if (bt.Text == "读取")
             {
                 fileList.Clear();
@@ -33,8 +34,27 @@ namespace TransverterApp
                     {
                         foreach (string f in Directory.EnumerateFiles(dirpath))
                         {
-                            if (Regex.Match(Path.GetExtension(f), @"qmc").Success)
-                                fileList.Add(Path.GetFileName(f));
+                            var qmcRe = Regex.Match(Path.GetExtension(f), @"qmc");
+                            if (mqms.IsToggled)
+                            {
+                                var re = Regex.Match(f, @"\s\[\S{4,5}\]");
+                                if (re.Success)
+                                {
+                                    File.Move(f, f.Replace(re.Value, ""));
+                                    if (qmcRe.Success)
+                                        fileList.Add(Path.GetFileName(f.Replace(re.Value, "")));
+                                }
+                                else
+                                {
+                                    if (qmcRe.Success)
+                                        fileList.Add(Path.GetFileName(f));
+                                }
+                            }
+                            else
+                            {
+                                if (qmcRe.Success)
+                                    fileList.Add(Path.GetFileName(f));
+                            }
                         }
                     }
                     catch
@@ -67,14 +87,13 @@ namespace TransverterApp
                                 }
                                 fileList[i] = "[解码完成]" + fileList[i];
                             }
+                            bt.Text = "读取";
                         }
                         catch (Exception)
                         {
 
                         }
-                    }).Wait();
-
-                    bt.Text = "读取";
+                    });
                 }
             }
         }
