@@ -11,6 +11,7 @@
             <RowDefinition Height="1*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
         <Grid.Resources>
@@ -31,7 +32,11 @@
             <Switch IsToggled="True"/>
             <Label Text="去掉QQ自动生成的[*]"/>
         </StackLayout>
-        <ListView ItemsSource="{Binding fileList}" SelectionMode="None" Grid.Row="3" Header="待处理文件列表："/>
+        <StackLayout Grid.Row="3" Orientation="Horizontal" Margin="0,0,0,10">
+            <Switch IsToggled="False"/>
+            <Label Text="QQ音乐车机版"/>
+        </StackLayout>
+        <ListView ItemsSource="{Binding fileList}" SelectionMode="None" Grid.Row="4" Header="待处理文件列表："/>
     </Grid>
 
 </ContentPage>

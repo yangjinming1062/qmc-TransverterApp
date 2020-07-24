@@ -25,6 +25,9 @@ namespace TransverterApp
         {
             Button bt = sender as Button;
             Switch mqms = ((Content as Grid).Children[2] as StackLayout).Children[0] as Switch;
+            Switch IsCar = ((Content as Grid).Children[3] as StackLayout).Children[0] as Switch;
+            if (IsCar.IsToggled)
+                dirpath = dirpath.Replace("qqmusic", "qqmusiccar");
             if (bt.Text == "读取")
             {
                 fileList.Clear();
